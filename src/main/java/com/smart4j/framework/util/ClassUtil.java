@@ -44,6 +44,13 @@ public final class ClassUtil {
     }
 
     /**
+     * 加载类（默认将初始化类）
+     */
+    public static Class<?> loadClass(String className) {
+        return loadClass(className, true);
+    }
+
+    /**
      * 获取指定包下的所有类
      */
     public static Set<Class<?>> getClassSet(String packageName){

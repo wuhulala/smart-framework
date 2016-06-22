@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  *
  * Created by xueaohui on 2016/6/22.
  */
-public class ReflectionUtil {
+public final class ReflectionUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionUtil.class);
 
     /**
@@ -47,8 +47,8 @@ public class ReflectionUtil {
      * 设置成员变量的值
      */
     public static void setField(Object obj , Field field , Object value){
-        field.setAccessible(true);
         try {
+            field.setAccessible(true);
             field.set(obj,value);
         } catch (IllegalAccessException e) {
             LOGGER.error("set field failure" , e );
