@@ -1,9 +1,9 @@
-package org.smart4j.chapter3.controller;
+package org.smart4j.app.controller;
 
 import java.util.List;
 import java.util.Map;
-import org.smart4j.chapter3.model.Customer;
-import org.smart4j.chapter3.service.CustomerService;
+import org.smart4j.app.model.Customer;
+import org.smart4j.app.service.CustomerService;
 import org.smart4j.framework.annotation.Action;
 import org.smart4j.framework.annotation.Controller;
 import org.smart4j.framework.annotation.Inject;

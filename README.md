@@ -14,3 +14,7 @@ the time I need imitate
   + (2) 再调用 request.getInputStream()或request.getReader()已经得不到流中的内容，
   + (3) 因为在调用 request.getParameter()时
   + (4) 系统可能对表单中提交的数 据以流的形式读了一次,反之亦然。
+- 6.添加app包
+- 7.bug
+  + (1)ClassUtil:63 Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".","/")); 格式应该是 /C:/ddd
+  + (2)smart.properties smart.framework.app.base_package = org.smart4j.app 扫描的包应该是app包

@@ -1,8 +1,8 @@
-package org.smart4j.chapter3.service;
+package org.smart4j.app.service;
 
 import java.util.List;
 import java.util.Map;
-import org.smart4j.chapter3.model.Customer;
+import org.smart4j.app.model.Customer;
 import org.smart4j.framework.annotation.Service;
 import org.smart4j.framework.helper.DataBaseHelper;
 
