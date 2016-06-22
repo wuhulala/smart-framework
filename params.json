@@ -1,6 +1,6 @@
 {
-  "name": "Chapter3",
-  "tagline": "",
-  "body": "#从零开始写javaWeb框架 \r\nNow I need to imitate\r\n>边看黄勇老师书边写，从未这么一次看书写这么多代码\r\n\r\n##2016/06/22\r\n- 1. 添加ClassLoad类\r\n- 2. 添加annotation\r\n- 3. 实现bean 容器\r\n  + java反射 网上可以找点资料\r\n- 4. 添加依赖注入功能（但是只能单例 当一个类被初始化两次就会有异常）\r\n  + (1) 反射-获取属性注入 \r\n  + (2) getFields()获得某个类的所有的公共（public）的字段，包括父类。 \r\n  + (3) getDeclaredFields()获得某个类的所有申明的字段，即包括public、private和proteced，但是不包括父类的申明字段。 \r\n- 5.添加DispatcherServlet\r\n  + (1) 先通过调用request.getParameter() 方法得到参数后，\r\n  + (2) 再调用 request.getInputStream()或request.getReader()已经得不到流中的内容，\r\n  + (3) 因为在调用 request.getParameter()时\r\n  + (4) 系统可能对表单中提交的数 据以流的形式读了一次,反之亦然。\r\n- 6.添加app包\r\n- 7.bug\r\n  + (1)ClassUtil:63 Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(\".\",\"/\")); 格式应该是 /C:/ddd\r\n  + (2)smart.properties smart.framework.app.base_package = org.smart4j.app 扫描的包应该是app包\r\n",
+  "name": "从零开始写javaWeb框架",
+  "tagline": "Now I need to imitate",
+  "body": ">边看黄勇老师书边写，从未这么一次看书写这么多代码\r\n\r\n##2016/06/22\r\n- 1. 添加ClassLoad类\r\n- 2. 添加annotation\r\n- 3. 实现bean 容器\r\n  + java反射 网上可以找点资料\r\n- 4. 添加依赖注入功能（但是只能单例 当一个类被初始化两次就会有异常）\r\n  + (1) 反射-获取属性注入 \r\n  + (2) getFields()获得某个类的所有的公共（public）的字段，包括父类。 \r\n  + (3) getDeclaredFields()获得某个类的所有申明的字段，即包括public、private和proteced，但是不包括父类的申明字段。 \r\n- 5.添加DispatcherServlet\r\n  + (1) 先通过调用request.getParameter() 方法得到参数后，\r\n  + (2) 再调用 request.getInputStream()或request.getReader()已经得不到流中的内容，\r\n  + (3) 因为在调用 request.getParameter()时\r\n  + (4) 系统可能对表单中提交的数 据以流的形式读了一次,反之亦然。\r\n- 6.添加app包\r\n- 7.bug\r\n  + (1)ClassUtil:63 Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(\".\",\"/\")); 格式应该是 /C:/ddd\r\n  + (2)smart.properties smart.framework.app.base_package = org.smart4j.app 扫描的包应该是app包\r\n",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
