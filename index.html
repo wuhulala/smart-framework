@@ -28,7 +28,12 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <blockquote>
+          <h1>
+<a id="从零开始写javaweb框架" class="anchor" href="#%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%86%99javaweb%E6%A1%86%E6%9E%B6" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>从零开始写javaWeb框架</h1>
+
+<p>Now I need to imitate</p>
+
+<blockquote>
 <p>边看黄勇老师书边写，从未这么一次看书写这么多代码</p>
 </blockquote>
 
@@ -67,6 +72,27 @@
 <ul>
 <li>(1)ClassUtil:63 Enumeration urls = getClassLoader().getResources(packageName.replace(".","/")); 格式应该是 /C:/ddd</li>
 <li>(2)smart.properties smart.framework.app.base_package = org.smart4j.app 扫描的包应该是app包</li>
+</ul>
+</li>
+<li>8.proxy(代理模式)
+
+<ul>
+<li>(1)java静态代理(使用较少)</li>
+<li>(2)java动态代理(只能代理接口，创建速度较快)</li>
+<li>(3)CGLib代理（可代理类，但是创建速度较慢）</li>
+<li>9.Aspect(切面 基于方法)</li>
+<li>(1)获取所有继承AspectProxy代理类</li>
+<li>(2)判断是否有注解<a href="https://github.com/Aspect" class="user-mention">@Aspect</a>的类</li>
+<li>(3)获取所有有注解<a href="https://github.com/Aspect" class="user-mention">@Aspect</a>中value的注解的类 <a href="https://github.com/Aspect" class="user-mention">@Aspect</a>(Controller.class)</li>
+<li>(4)对代理类和目标类进行映射 现在是一个代理类映射多个目标类 但我们需要的是一个目标类对应多个代理类</li>
+<li>(5)遍历进行反向映射</li>
+<li>(6)现在当有两个代理类都实现了begin方法的时候会不确定那个方法先运行</li>
+</ul>
+</li>
+<li>10.map
+
+<ul>
+<li>后面添加相同的Key的会覆盖前面的值</li>
 </ul>
 </li>
 </ul>
