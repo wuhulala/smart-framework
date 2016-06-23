@@ -21,6 +21,14 @@ public class CustomerController {
     private CustomerService customerService;
 
     /**
+     * 默认
+     */
+    @Action("get:/")
+    public View indexs(Param param) {
+        List<Customer> customerList = customerService.getCustomerList();
+        return new View("customer.jsp").addModel("customerList", customerList);
+    }
+    /**
      * 进入 客户列表 界面
      */
     @Action("get:/customer")
@@ -34,7 +42,6 @@ public class CustomerController {
      */
     @Action("get:/customer_show")
     public View show(Param param) {
-        System.out.println("000000000000000000000000000000000000000000000");
         long id = param.getLong("id");
         Customer customer = customerService.getCustomer(id);
         return new View("customer_show.jsp").addModel("customer", customer);
@@ -45,7 +52,6 @@ public class CustomerController {
      */
     @Action("get:/customer_create")
     public View create(Param param) {
-        System.out.println("000000000000000000000000000000000000000000000");
 
         return new View("customer_create.jsp");
     }

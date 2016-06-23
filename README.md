@@ -20,3 +20,16 @@ Now I need to imitate
 - 7.bug
   + (1)ClassUtil:63 Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".","/")); 格式应该是 /C:/ddd
   + (2)smart.properties smart.framework.app.base_package = org.smart4j.app 扫描的包应该是app包
+- 8.proxy(代理模式)
+  + (1)java静态代理(使用较少)
+  + (2)java动态代理(只能代理接口，创建速度较快)
+  + (3)CGLib代理（可代理类，但是创建速度较慢）
+ - 9.Aspect(切面 基于方法)
+  + (1)获取所有继承AspectProxy代理类
+  + (2)判断是否有注解@Aspect的类
+  + (3)获取所有有注解@Aspect中value的注解的类 @Aspect(Controller.class)
+  + (4)对代理类和目标类进行映射 现在是一个代理类映射多个目标类 但我们需要的是一个目标类对应多个代理类
+  + (5)遍历进行反向映射
+  + (6)现在当有两个代理类都实现了begin方法的时候会不确定那个方法先运行
+- 10.map
+  + 后面添加相同的Key的会覆盖前面的值
