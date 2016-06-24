@@ -133,49 +133,43 @@ public final class DataBaseHelper {
     }
 
     /**
-     * 执行更新语句(包括update insert delete)
+     * 执行更新语句（包括：update、insert、delete）
      */
-    public static int executeUpdate(String sql , Object... params){
-        int rows = 0 ;
+    public static int update(String sql, Object... params) {
+        int rows;
         try {
-            Connection connection = getConnection();
-            rows = QUERY_RUNNER.update(connection, sql, params);
-        }catch (SQLException e){
-            LOGGER.error("execute update failure" , e );
+            Connection conn = getConnection();
+            rows = QUERY_RUNNER.update(conn, sql, params);
+        } catch (SQLException e) {
+            LOGGER.error("execute update failure", e);
             throw new RuntimeException(e);
-        }finally {
-            closeConnection();
         }
-
         return rows;
     }
 
     /**
      * 插入实体
      */
-    public static <T>boolean insertEntity(Class<T> entityClass,Map<String , Object>fieldMap){
-        if(CollectionUtil.isEmpty(fieldMap)){
-            LOGGER.error("can not insert entity : fieldMap is empty");
+    public static <T> boolean insertEntity(Class<T> entityClass, Map<String, Object> fieldMap) {
+        if (CollectionUtil.isEmpty(fieldMap)) {
+            LOGGER.error("can not insert entity: fieldMap is empty");
             return false;
         }
 
-        String sql = "INSERT INTO " +  getTableName(entityClass) ;
+        String sql = "INSERT INTO " + entityClass.getSimpleName();
         StringBuilder columns = new StringBuilder("(");
         StringBuilder values = new StringBuilder("(");
-
-        for (String fieldName : fieldMap.keySet()){
-            columns.append(fieldName).append(",");
-            values.append("?,");
+        for (String fieldName : fieldMap.keySet()) {
+            columns.append(fieldName).append(", ");
+            values.append("?, ");
         }
-
-        columns.replace(columns.indexOf(","),columns.length(),")");
-        values.replace(columns.indexOf(","), values.length(), ")");
-
-        sql += columns +" VALUES" +values;
+        columns.replace(columns.lastIndexOf(", "), columns.length(), ")");
+        values.replace(values.lastIndexOf(", "), values.length(), ")");
+        sql += columns + " VALUES " + values;
 
         Object[] params = fieldMap.values().toArray();
 
-        return executeUpdate(sql,params) == 1;
+        return update(sql, params) == 1;
     }
 
     /**
@@ -203,7 +197,7 @@ public final class DataBaseHelper {
         paramList.add(id);
         Object[] params = paramList.toArray();
 
-        return executeUpdate(sql, params) == 1;
+        return update(sql, params) == 1;
     }
 
 
@@ -212,7 +206,7 @@ public final class DataBaseHelper {
      */
     public static <T> boolean deleteEntity(Class<T> entityClass ,long id){
         String sql = "DELETE FROM " + getTableName(entityClass) + "WHERE id = ?";
-        return executeUpdate(sql, id) == 1;
+        return update(sql, id) == 1;
     }
 
     private static  String getTableName(Class<?> entityClass) {

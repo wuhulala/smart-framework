@@ -5,7 +5,9 @@ import java.util.Map;
 import org.smart4j.app.model.Customer;
 import org.smart4j.framework.annotation.Service;
 import org.smart4j.framework.annotation.Transaction;
+import org.smart4j.framework.bean.FileParam;
 import org.smart4j.framework.helper.DataBaseHelper;
+import org.smart4j.framework.helper.UploadHelper;
 
 /**
  * 提供客户数据服务
@@ -33,10 +35,13 @@ public class CustomerService {
      * 创建客户
      */
     @Transaction
-    public boolean createCustomer(Map<String, Object> fieldMap) {
-        return DataBaseHelper.insertEntity(Customer.class, fieldMap);
+    public boolean createCustomer(Map<String, Object> fieldMap, FileParam fileParam) {
+        boolean result = DataBaseHelper.insertEntity(Customer.class, fieldMap);
+        if (result) {
+            UploadHelper.uploadFile("D:/tmp/upload/", fileParam);
+        }
+        return result;
     }
-
     /**
      * 更新客户
      */

@@ -8,6 +8,7 @@ import org.smart4j.framework.annotation.Action;
 import org.smart4j.framework.annotation.Controller;
 import org.smart4j.framework.annotation.Inject;
 import org.smart4j.framework.bean.Data;
+import org.smart4j.framework.bean.FileParam;
 import org.smart4j.framework.bean.Param;
 import org.smart4j.framework.bean.View;
 
@@ -21,18 +22,10 @@ public class CustomerController {
     private CustomerService customerService;
 
     /**
-     * 默认
-     */
-    @Action("get:/")
-    public View indexs(Param param) {
-        List<Customer> customerList = customerService.getCustomerList();
-        return new View("customer.jsp").addModel("customerList", customerList);
-    }
-    /**
      * 进入 客户列表 界面
      */
     @Action("get:/customer")
-    public View index(Param param) {
+    public View index() {
         List<Customer> customerList = customerService.getCustomerList();
         return new View("customer.jsp").addModel("customerList", customerList);
     }
@@ -51,8 +44,7 @@ public class CustomerController {
      * 进入 创建客户 界面
      */
     @Action("get:/customer_create")
-    public View create(Param param) {
-
+    public View create() {
         return new View("customer_create.jsp");
     }
 
@@ -62,7 +54,8 @@ public class CustomerController {
     @Action("post:/customer_create")
     public Data createSubmit(Param param) {
         Map<String, Object> fieldMap = param.getFieldMap();
-        boolean result = customerService.createCustomer(fieldMap);
+        FileParam fileParam = param.getFile("photo");
+        boolean result = customerService.createCustomer(fieldMap, fileParam);
         return new Data(result);
     }
 
@@ -90,7 +83,7 @@ public class CustomerController {
     /**
      * 处理 删除客户 请求
      */
-    @Action("delete:/customer_delete")
+    @Action("delete:/customer_edit")
     public Data delete(Param param) {
         long id = param.getLong("id");
         boolean result = customerService.deleteCustomer(id);
