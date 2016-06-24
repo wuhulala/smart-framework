@@ -16,6 +16,7 @@ public class ProxyManager {
 
     public static <T> T createProxy(final Class<?> targetClass , final List<Proxy> proxyList){
         return (T) Enhancer.create(targetClass, new MethodInterceptor() {
+            //创建一个代理 并且 添加拦截方法
             public Object intercept(Object targetObject, Method targetMethod, Object[] methodParams, MethodProxy methodProxy) throws Throwable {
                 return new ProxyChain(proxyList,targetClass,targetObject,targetMethod,methodProxy,methodParams).doProxyChain();
             }

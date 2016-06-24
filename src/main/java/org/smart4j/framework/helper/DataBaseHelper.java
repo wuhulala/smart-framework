@@ -169,7 +169,7 @@ public final class DataBaseHelper {
         }
 
         columns.replace(columns.indexOf(","),columns.length(),")");
-        values.replace(columns.indexOf(","),values.length(),")");
+        values.replace(columns.indexOf(","), values.length(), ")");
 
         sql += columns +" VALUES" +values;
 
@@ -219,5 +219,53 @@ public final class DataBaseHelper {
         return entityClass.getSimpleName();
     }
 
+    /**
+     * 开启事务
+     */
+    public static void beginTransaction(){
+        Connection connection = getConnection();
+        if(connection != null){
+            try {
+                connection.setAutoCommit(false);
+            }catch (SQLException e){
+                LOGGER.error("begin transaction failure" , e);
+                throw new RuntimeException(e);
+            }finally {
+                CONNECTION_HOLDER.set(connection);
+            }
+        }
+    }
+    /**
+     * 提交事务
+     */
+    public static void commitTransaction(){
+        Connection connection = getConnection();
+        try {
+            connection.commit();
+            connection.close();
+        }catch (SQLException e){
+            LOGGER.error("commit transaction failure" , e);
+            throw new RuntimeException(e);
+        }finally {
+            CONNECTION_HOLDER.remove();
+        }
+    }
+    /**
+     * 回滚事务 回到未操作之前的状态
+     */
+    public static void rollBackTransaction(){
+        Connection connection = getConnection();
+        if(connection != null){
+            try {
+                connection.rollback();
+                connection.close();
 
+            } catch (SQLException e) {
+                LOGGER.error("rollback transaction failure", e);
+                throw new RuntimeException(e);
+            }finally {
+                CONNECTION_HOLDER.remove();
+            }
+        }
+    }
 }

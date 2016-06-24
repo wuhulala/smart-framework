@@ -14,6 +14,7 @@ import org.smart4j.framework.annotation.Service;
 import org.smart4j.framework.proxy.AspectProxy;
 import org.smart4j.framework.proxy.Proxy;
 import org.smart4j.framework.proxy.ProxyManager;
+import org.smart4j.framework.proxy.TransactionProxy;
 
 /**
  * 方法拦截助手类
@@ -37,7 +38,7 @@ public final class AopHelper {
                 List<Proxy> proxyList = targetEntry.getValue();
                 //创建代理
                 Object proxy = ProxyManager.createProxy(targetClass, proxyList);
-                //遍历添加代理为bean
+                //遍历添加代理为bean，如果已经被添加至bean类中 将会覆盖已存在的bean 现在的是一个有CGLib生成的代理类
                 BeanHelper.setBean(targetClass, proxy);
             }
         } catch (Exception e) {
@@ -48,7 +49,19 @@ public final class AopHelper {
     private static Map<Class<?>, Set<Class<?>>> createProxyMap() throws Exception {
         Map<Class<?>, Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
         addAspectProxy(proxyMap);
+        /**
+         * 1. 为所有Service方法添加事务代理
+         * 2. 判断是否有事务注解
+         * 3. 有事务注解的开启事务->执行方法->提交事务
+         * 4. 无事务注解的执行方法(应用于单条查询)
+         */
+        addTransactionProxy(proxyMap);
         return proxyMap;
+    }
+
+    private static void addTransactionProxy(Map<Class<?>,Set<Class<?>>> proxyMap){
+        Set<Class<?>> serviceClassSet = ClassHelper.getServiceClassSet();
+        proxyMap.put(TransactionProxy.class,serviceClassSet);
     }
 
     private static void addAspectProxy(Map<Class<?>, Set<Class<?>>> proxyMap) throws Exception {
