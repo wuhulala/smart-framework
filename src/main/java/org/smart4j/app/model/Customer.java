@@ -95,4 +95,17 @@ public class Customer {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", contact='" + contact + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", email='" + email + '\'' +
+                ", remark='" + remark + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
+    }
 }

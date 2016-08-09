@@ -29,9 +29,7 @@ import org.smart4j.framework.util.StringUtil;
 
 /**
  * 请求转发器
- *
- * @author huangyong
- * @since 1.0.0
+ * @author xueaohui
  */
 @WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
@@ -48,10 +46,11 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void registerServlet(ServletContext servletContext) {
+        // 用 JspServlet 映射所有 JSP 请求
         ServletRegistration jspServlet = servletContext.getServletRegistration("jsp");
         jspServlet.addMapping("/index.jsp");
         jspServlet.addMapping(ConfigHelper.getAppJSpPath() + "*");
-
+        // 用 DefaultServlet 映射所有静态资源
         ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
         defaultServlet.addMapping("/favicon.ico");
         defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*");
@@ -59,38 +58,45 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletHelper.init(request, response);
+        try {
+            String requestMethod = request.getMethod().toLowerCase();
+            String requestPath = request.getPathInfo();
+            Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
+            if (handler != null) {
+                Class<?> controllerClass = handler.getControllerClass();
+                Object controllerBean = BeanHelper.getBean(controllerClass);
 
-        String requestMethod = request.getMethod().toLowerCase();
-        String requestPath = request.getPathInfo();
-        Handler handler = ControllerHelper.getHandler(requestMethod, requestPath);
-        if (handler != null) {
-            Class<?> controllerClass = handler.getControllerClass();
-            Object controllerBean = BeanHelper.getBean(controllerClass);
+                Param param;
+                if (UploadHelper.isMultipart(request)) {
+                    param = UploadHelper.createParam(request);
+                } else {
+                    param = RequestHelper.createParam(request);
+                }
 
-            Param param;
-            if (UploadHelper.isMultipart(request)) {
-                param = UploadHelper.createParam(request);
-            } else {
-                param = RequestHelper.createParam(request);
+                Object result;
+                Method actionMethod = handler.getActionMethod();
+                if (param.isEmpty()) {
+                    result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
+                } else {
+                    result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
+                }
+
+                if (result instanceof View) {
+                    handleViewResult((View) result, request, response);
+                } else if (result instanceof Data) {
+                    handleDataResult((Data) result, response);
+                }
             }
-
-            Object result;
-            Method actionMethod = handler.getActionMethod();
-            if (param.isEmpty()) {
-                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
-            } else {
-                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
-            }
-
-            if (result instanceof View) {
-                handleViewResult((View) result, request, response);
-            } else if (result instanceof Data) {
-                handleDataResult((Data) result, response);
-            }
+        } finally {
+            ServletHelper.destroy();
         }
 
     }
 
+    /**
+     * 转发返回页面的请求
+     */
     private void handleViewResult(View view, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String path = view.getPath();
         if (StringUtil.isNotEmpty(path)) {
@@ -106,6 +112,9 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
+    /**
+     * 转发返回json数据的请求
+     */
     private void handleDataResult(Data data, HttpServletResponse response) throws IOException {
         Object model = data.getModel();
         if (model != null) {
