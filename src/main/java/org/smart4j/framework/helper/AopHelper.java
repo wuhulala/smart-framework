@@ -19,8 +19,7 @@ import org.smart4j.framework.proxy.TransactionProxy;
 /**
  * 方法拦截助手类
  *
- * @author huangyong
- * @since 1.0.0
+ * @author xueaohui
  */
 public final class AopHelper {
 
